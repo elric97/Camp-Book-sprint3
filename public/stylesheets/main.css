@@ -1,0 +1,37 @@
+.thumbnail img
+{
+    width: 100%;
+}
+.thumbnail
+{
+     padding: 0;
+}
+#delete
+{
+    display: inline;
+}
+
+#deletecm
+{
+    display: inline;
+}
+.img
+{
+    opacity: 0.75;
+    transition: opacity .35s ease;
+}
+
+
+.more
+{
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+.try:hover .more
+{
+  opacity: 1;
+}
+.try:hover .img
+{
+    opacity: 1;
+}

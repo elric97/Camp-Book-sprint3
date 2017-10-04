@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/landing.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+    
+    <div id="mycarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#mycarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#mycarousel" data-slide-to="1"></li>
+        <li data-target="#mycarousel" data-slide-to="2"></li>
+        <li data-target="#mycarousel" data-slide-to="3"></li>
+        <li data-target="#mycarousel" data-slide-to="4"></li>
+      </ol>
+
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" role="listbox">
+          <div class="carousel-caption" id="content">
+                <h1>Welcome To CampBook</h1>
+                <h3></h3>
+                <hr>
+                <a class="btn btn-default btn-lg" href="/campgrounds"><i class="fa fa-hand-o-down" aria-hidden="true"></i> Get Started</a>
+                <a class="btn btn-default btn-lg" id="about"><i class="fa fa-hand-o-down" aria-hidden="true"></i> About Us</a>  
+          </div>
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1504659911734-a31e0a49511e?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=0bd3382966266bff325588282d7259ed" data-color="lightblue" alt="First Image">
+            <!-- <div class="carousel-caption">
+                <h3>First Image</h3>
+            </div> -->
+        </div>
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=ee413266c2b4438b00a53be2bc214420" data-color="firebrick" alt="Second Image">
+            <!-- <div class="carousel-caption">
+                <h3>Second Image</h3>
+            </div> -->
+        </div>
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=f95bf08e6a79c84d1ffcec22b84e00fa" data-color="violet" alt="Third Image">
+            <!-- <div class="carousel-caption">
+                <h3>Third Image</h3>
+            </div> -->
+        </div>
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1475483768296-6163e08872a1?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=1d66376c242918833319d4d00849f44d" data-color="lightgreen" alt="Fourth Image">
+            <!-- <div class="carousel-caption">
+                <h3>Fourth Image</h3>
+            </div> -->
+        </div>
+        <div class="item">
+            <img src="https://images.unsplash.com/photo-1482355347028-ff60443f60fe?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=e316ae0070d7088f52d94a9532dd461f" data-color="tomato" alt="Fifth Image">
+            <!-- <div class="carousel-caption">
+                <h3>Fifth Image</h3>
+            </div> -->
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <a class="left carousel-control" href="#mycarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#mycarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
+    <script>
+        
+        var $item = $('.carousel .item'); 
+        var $wHeight = $(window).height();
+        $item.eq(0).addClass('active');
+        $item.height($wHeight); 
+        $item.addClass('full-screen');
+
+        $('.carousel img').each(function() 
+        {
+          var $src = $(this).attr('src');
+          var $color = $(this).attr('data-color');
+          $(this).parent().css({
+            'background-image' : 'url(' + $src + ')',
+            'background-color' : $color
+          });
+          $(this).remove();
+        });
+
+        $(window).on('resize', function ()
+        {
+          $wHeight = $(window).height();
+          $item.height($wHeight);
+        });
+
+        $('.carousel').carousel(
+        {
+          interval: 6000,
+          pause: "false"
+        });
+    
+    </script>
+</body>
+    
+</html>
