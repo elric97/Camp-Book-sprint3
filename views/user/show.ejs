@@ -1,0 +1,104 @@
+<% include ../partials/header %>
+
+<hr>
+<div class="container">
+	<div class="row">
+  		<div class="col-sm-10"><h1><%= user.username %></h1></div>
+    	<div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="https://i.imgur.com/yTsOoaa.png" style="color: black;"></a></div>
+    </div>
+    <div class="row">
+  		<div class="col-sm-4"><!--left col-->
+              
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Avatar <i class="fa fa-dashboard fa-1x"></i></li>
+                <img class="img-responsive img-thumbnail" src="<%= user.avatar %>" alt="Chania">
+            </ul> 
+          
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Profile</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> <%= user.email%></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Phone Number</strong></span> <%= user.phonenumber%></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Place</strong></span> <%=user.city%></li>
+            </ul> 
+               
+               
+          <div class="panel panel-default">
+            <div class="panel-heading">Social Media</div>
+            <div class="panel-body">
+            	<i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
+            </div>
+          </div>
+          
+        </div><!--/col-3-->
+    	<div class="col-sm-8">
+          
+          <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#home" data-toggle="tab">Your Bookings</a></li>
+            <li><a href="#messages" data-toggle="tab">Your Campgrounds</a></li>
+          </ul>
+              
+          <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <div class="row gap"> 
+                    <div class="col-md-3 col-sm-4">
+                        <div class="thumbnail try">
+                            <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" class="img">
+                            <div class="caption text-center">
+                                 <h4>Hey</h4> 
+                            </div>
+                        </div>
+                     </div>
+                     
+                   </div>
+                <!--<hr>-->
+                <!--<div class="row">-->
+                <!--  <div class="col-md-4 col-md-offset-4 text-center">-->
+                <!--  	<ul class="pagination" id="myPager"></ul>-->
+                <!--  </div>-->
+                <!--</div>-->
+              
+              <hr>
+              
+             </div><!--/tab-pane-->
+             <div class="tab-pane" id="messages">
+               <div class="row gap"> 
+               <% for (var i=0;i<camp.length;i++) { %>
+                    <div class="col-md-3 col-sm-4">
+                        <div class="thumbnail try">
+                            <img src="<%= camp[i].image %>"class="img">
+                            <div class="caption text-center">
+                                 <h4><%= camp[i].name %></h4> 
+                            </div>
+                        </div>
+                     </div>
+                     <% } %>
+                   </div>
+               
+             </div><!--/tab-pane-->
+            
+               
+              </div><!--/tab-pane-->
+          </div><!--/tab-content-->
+
+        </div><!--/col-9-->
+</div> <!-- container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function()
+    {
+        $(".nav-tabs a").click(function()
+        {
+            $(this).tab('show');
+        });
+        // $('.nav-tabs a').on('shown.bs.tab', function(event)
+        // {
+        //     var x = $(event.target).text();         // active tab
+        //     var y = $(event.relatedTarget).text();  // previous tab
+        //     $(".act span").text(x);
+        //     $(".prev span").text(y);
+        // });
+    });
+</script>
+
+</body>

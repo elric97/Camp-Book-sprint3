@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
-
+var Campground = require("../models/campground");
 //main route
 router.get("/",function(req,res)
 {
@@ -18,10 +18,15 @@ router.get("/register",function(req, res)
 //handle sign up 
 router.post("/register",function(req,res)
 {
+    var newUser = new User({email: req.body.email,phonenumber: req.body.contact,city: req.body.city,username: req.body.username,avatar: req.body.avatar});
     //now we have to register the user 
     //we don't store password directly in database rather we pass it as an argument so that it is hashed
+    if (req.body.adminCode === "secretkey")
+    {
+        newUser.isAdmin = true;
+    }
     // and stored in database- salt used to retrieve the password from hashed value 
-    User.register(new User({email: req.body.email,phonenumber: req.body.contact,city: req.body.city,username: req.body.username,}), req.body.password, function(err,user)
+    User.register(newUser, req.body.password, function(err,user)
     {
         if(err)
         {
@@ -60,6 +65,27 @@ router.post("/login",passport.authenticate("local",
 router.get("/logout",function(req, res) {
     req.logout();
     res.redirect("/campgrounds");
+});
+
+//User Route
+router.get("/users/:id",function(req, res) 
+{
+    User.findById(req.params.id,function(err,found)
+    {
+        if (err)
+        {
+            req.flash("error","User not found");
+            res.redirect("/");
+        }
+        Campground.find({"author.username": found.username},function(err,cfound)
+        {
+            if(err)
+            {
+                res.redirect("/");
+            }
+            res.render("user/show",{user: found,camp: cfound});
+        });
+    });
 });
 
 function isLoggedIn(req,res,next)

@@ -8,18 +8,43 @@ router.get("/",function(req,res)
 {
     //get all campgrounds from db
     //req.user gives current user
-    
-    Campground.find({},function(err,allCampgrounds)
+    var noMatch = null;
+    if (req.query.search)
     {
-        if(err)
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Campground.find({name: regex},function(err,allCampgrounds)
         {
-            console.log(err);
-        }
-        else
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                if (allCampgrounds.length < 1)
+                {
+                    //req.flash("failure","No such campground exist");
+                    noMatch="No such campgrounds found, please search again";
+                    //res.redirect("/campgrounds");
+                }
+                res.render("campgrounds/index",{data: allCampgrounds,currentUser: req.user,noMatch: noMatch});
+            }
+        });
+    }
+    else
+    {
+         Campground.find({},function(err,allCampgrounds)
         {
-            res.render("campgrounds/index",{data: allCampgrounds,currentUser: req.user});
-        }
-    });
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                res.render("campgrounds/index",{data: allCampgrounds,currentUser: req.user,noMatch: noMatch});
+            }
+        });
+    }
+   
     // res.render("campgrounds",{data: campgrounds});
 });
 
@@ -130,6 +155,8 @@ router.delete("/:id",middleware.checkOwner,function(req,res)
 //middleware
 
 
-
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

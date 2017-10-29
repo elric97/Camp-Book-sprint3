@@ -125,3 +125,8 @@
    flex: 0 0 auto;
    -webkit-flex: 0 0 auto;
 }
+.gap
+{
+    padding-top: 2%;
+    padding-bottom: 2%;
+}

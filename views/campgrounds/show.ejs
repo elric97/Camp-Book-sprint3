@@ -18,7 +18,7 @@
                     <h4><a><%= val.name %></a></h4>
                     <p><%= val.description %></p>
                     <p>Submitted by <%= val.author.username %></p>
-                    <% if(currentUser && val.author.id.equals(currentUser._id)) {  %>
+                    <% if((currentUser && val.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin) ) {  %>
                         <a href="/campgrounds/<%= val._id%>/edit" class="btn btn-info">Edit</a>
                         <!-- To delete we need a form to send the request-->
                         <form action="/campgrounds/<%= val._id%>?_method=DELETE" method="POST" id="delete">
@@ -38,7 +38,7 @@
                             <strong><%= cmnt.author.username %></strong>
                             <span class="pull-right"><%= moment(cmnt.created).fromNow() %></span>
                             <p><%= cmnt.text %></p>
-                            <% if(currentUser && cmnt.author.id.equals(currentUser._id)) {  %>
+                            <% if((currentUser && cmnt.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin)) {  %>
                             <a class="btn btn-xs btn-warning" href="/campgrounds/<%= val._id %>/comments/<%= cmnt._id %>/edit">Edit</a>
                             <form action="/campgrounds/<%= val._id %>/comments/<%= cmnt._id %>?_method=DELETE" method="POST" id="deletecm">
                                 <input type="submit" class="btn btn-xs btn-danger" value="Delete">
