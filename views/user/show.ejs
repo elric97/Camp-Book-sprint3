@@ -11,7 +11,7 @@
               
             <ul class="list-group">
                 <li class="list-group-item text-muted">Avatar <i class="fa fa-dashboard fa-1x"></i></li>
-                <img class="img-responsive img-thumbnail" src="<%= user.avatar %>" alt="Chania">
+                <img class="img-responsive img-thumbnail" style="max-width: 100%;" src="<%= user.avatar %>" alt="Chania">
             </ul> 
           
             <ul class="list-group">
@@ -39,17 +39,23 @@
               
           <div class="tab-content">
             <div class="tab-pane active" id="home">
-                <div class="row gap"> 
-                    <div class="col-md-3 col-sm-4">
-                        <div class="thumbnail try">
-                            <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" class="img">
-                            <div class="caption text-center">
-                                 <h4>Hey</h4> 
-                            </div>
-                        </div>
-                     </div>
-                     
-                   </div>
+                <div class="row gap">
+                    <%if (book) { %>
+                        <% for (var i=0;i<book.length;i++) { %>
+                                <div class="col-md-3 col-sm-4">
+                                    <div class="thumbnail try">
+                                        <img src="<%= book[i].camp.image %>"class="img">
+                                        <div class="caption text-center">
+                                             <h4><%= book[i].camp.name %></h4>
+                                             <h4><%= moment(book[i].date).format('YYYY-MM-DD') %></h4>
+                                        </div>
+                                    </div>
+                                 </div>
+                         <% } %>
+                    <% } else { %>
+                        <h4>In Development</h4>
+                    <% } %>
+                </div>
                 <!--<hr>-->
                 <!--<div class="row">-->
                 <!--  <div class="col-md-4 col-md-offset-4 text-center">-->

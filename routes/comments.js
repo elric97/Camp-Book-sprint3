@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router({mergeParams: true}); //for sending the id to the cooments
 var Campground = require("../models/campground"),
     Comment = require("../models/comment"),
+    Booking = require("../models/booking"),
     middleware = require("../middleware");
     
 //new comments
@@ -105,6 +106,78 @@ router.delete("/comments/:comments_id",middleware.checkCOwner,function(req, res)
     });
 });
 
+router.get("/book",middleware.isLoggedIn,function(req, res) 
+{
+    Campground.findById(req.params.id,function(err,val)
+    {
+       if (err)
+       {
+           console.log(err);
+       }
+       else
+       {
+               res.render("book",{val: val});
+       }
+    });
+});
+
+router.post("/book",middleware.isLoggedIn,function(req,res)
+{
+    Campground.findById(req.params.id,function(err,val)
+    {
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            console.log(val);
+            var author = {
+               id: req.user._id,
+               username: req.user.username,
+               phonenumber: req.user.phonenumber
+            };
+            var date = req.body.date;
+            var camp= {
+                id: req.params.id,
+                name: val.name,
+                image: val.image
+            };
+            var val2={author: author,camp: camp,date: date};
+            Booking.create(val2,function(err,val3)
+            {
+                if(err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    val.bookings.push(val3);
+                    val.save();
+                    req.flash("success","booked successfully");
+                    res.redirect("/campgrounds/"+req.params.id);
+                }
+            })
+        }
+    })
+});
+
+//cancel booking
+router.delete("/book/:book_id",function(req, res) 
+{
+    Booking.findByIdAndRemove(req.params.book_id,function(err,val)
+    {
+        if(err)
+        {
+            res.redirect("back");
+        }
+        else
+        {
+            req.flash("success","Booking Cancelled");
+            res.redirect("/campgrounds/"+req.params.id);
+        }
+    });
+});
 
 
 //middleware to check ownership

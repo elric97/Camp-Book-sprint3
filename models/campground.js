@@ -15,13 +15,19 @@ var campgroundSchema = new mongoose.Schema(
                type: mongoose.Schema.Types.ObjectId,
                ref: "User"
            },
-           username: String
+           username: String,
+           phonenumber: String
        },
        comments:[
            {
                type: mongoose.Schema.Types.ObjectId,
                ref: "Comment" //name of model
-           }]
+           }],
+        bookings: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Booking"
+            }]
     });
     
 module.exports = mongoose.model("Campground",campgroundSchema);

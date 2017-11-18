@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
 var Campground = require("../models/campground");
+var Booking = require("../models/booking");
 //main route
 router.get("/",function(req,res)
 {
@@ -70,6 +71,7 @@ router.get("/logout",function(req, res) {
 //User Route
 router.get("/users/:id",function(req, res) 
 {
+    var store;
     User.findById(req.params.id,function(err,found)
     {
         if (err)
@@ -77,16 +79,43 @@ router.get("/users/:id",function(req, res)
             req.flash("error","User not found");
             res.redirect("/");
         }
+        Booking.find({"author.username": found.username}).exec(function(err,val)
+        {
+            if(err)
+            {
+                
+            }
+            else
+            {
+                console.log(val);
+                store = JSON.parse(JSON.stringify(val));
+                console.log(store);
+            }
+        });
         Campground.find({"author.username": found.username},function(err,cfound)
         {
             if(err)
             {
                 res.redirect("/");
             }
-            res.render("user/show",{user: found,camp: cfound});
+            // Booking.find({"author.username": found.username},function(err,bfound)
+            // {
+            //     if (err)
+            //     {
+            //         res.redirect("/");
+            //     }
+            //     console.log(bfound.camp.id);
+                
+            // });
+            res.render("user/show",{user: found,camp: cfound,book: store});
         });
     });
 });
+
+// router.get("/campgrounds/:id/book",isLoggedIn,function(req, res) 
+// {
+//     res.render("book");
+// });
 
 function isLoggedIn(req,res,next)
 {
@@ -94,6 +123,7 @@ function isLoggedIn(req,res,next)
     {
         return next;
     }
+    req.flash("error","You need to be logged in");
     res.redirect("/login");
 }
 

@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router(); //used for exporting the routes
 var Campground = require("../models/campground");
+var Booking = require("../models/booking");
 var middleware = require("../middleware"); //automatically require the content of index js
 
 //index campground
@@ -59,7 +60,8 @@ router.post("/",middleware.isLoggedIn, function(req,res)
    var cost = req.body.cost;
    var author = {
        id: req.user._id,
-       username: req.user.username
+       username: req.user.username,
+       phonenumber: req.user.phonenumber
    };
    var val={name: name,image: image,description: dsc,author: author,location: location,cost: cost};
    //create a new campground and save to a database 
@@ -89,8 +91,23 @@ router.get("/:id",function(req, res)
 {
     //find the campground with id
     var id=req.params.id;
-    //we use the populate function for this 
-    Campground.findById(req.params.id).populate("comments").exec(function(err,val)
+    var store;
+    //we use the populate function for this
+    Booking.find({"camp.id": id},function(err,val)
+    {
+        if(err)
+        {
+            
+        }
+        else
+        {
+            console.log(val);
+            store = JSON.parse(JSON.stringify(val));
+            console.log(store);
+        }
+    });
+    
+    Campground.findById(req.params.id).populate("comments").populate("bookings").exec(function(err,val)
     {
         if(err || !val)
         {
@@ -98,7 +115,7 @@ router.get("/:id",function(req, res)
         }
         else
         {
-            res.render("campgrounds/show",{val: val});
+            res.render("campgrounds/show",{val: val,book: store});
         }
     });
     //show template
