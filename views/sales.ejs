@@ -1,0 +1,51 @@
+<% include ./partials/header %>
+<body>
+<div class="conatiner">
+    <h1>Booking Statistics</h1>
+    
+    <div id="piechart" style="display: table; margin: 0 auto;"></div>
+</div>
+    
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+// Load google charts
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+// Draw the chart and set the chart values
+function drawChart() 
+{
+    var books = [];
+    var elements=[];
+    elements.push('Task');
+    elements.push('Hours per Day');
+    books.push(elements);
+    elements=[];
+    <% for(var i=0;i<book.length;i++) { %>
+        elements.push('<%=book[i].name%>');
+        elements.push(<%=book[i].bookings.length%>);
+        books.push(elements);
+        elements=[];
+    <% } %>
+    
+    console.log(books);
+    // book.forEach(function(iter)
+    // {
+    //     books.push(iter.bookings.length);
+    // });
+    var data = new google.visualization.arrayToDataTable(books);
+
+
+  // Optional; add a title and set the width and height of the chart
+  var options = {'title':'Bookings', 'width':650, 'height':500};
+
+  // Display the chart inside the <div> element with id="piechart"
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  chart.draw(data, options);
+}
+</script>
+
+</body>
+</html>

@@ -7,13 +7,14 @@
             <div class="list-group">
                 <li class="list-group-item active">Contact - <%= val.author.phonenumber %></li>
                 <li class="list-group-item" id="weather">info 2</li>
-                <li class="list-group-item">Bookings Made</li>
-                <%if(book) {%>
-                <% for (var i=0;i<book.length;i++) { %>
-                    <li class="list-group-item" style="color: green;"><%= book[i].author.username %> on <%= book[i].date.toString().slice(0,10) %></li>
-                <% } %>
+                <%if(book && (currentUser && val.author.id.equals(currentUser._id))) {%>
+                    <li class="list-group-item">Bookings Made</li>
+                    <% for (var i=0;i<book.length;i++) { %>
+                        <li class="list-group-item" style="color: green;"><%= book[i].author.username %> on <%= book[i].date.toString().slice(0,10) %></li>
+                    <% } %>
                 <% } %>
             </div>
+            <div id="map"></div>
         </div>
         <div class="col-md-9">
             <div class="thumbnail">
@@ -31,18 +32,21 @@
                         </form>
                     <% } %>
                     <div class="text-right">
-                        <%if(val.bookings.length>0 && currentUser) {%>
-                            <%val.bookings.forEach(function(book) {%>
-                                <% if(book.author.id.equals(currentUser._id)) {%>
-                                    <form action="/campgrounds/<%= val._id %>/book/<%= book._id %>?_method=DELETE" method="POST" id="deletecm">
+                            <% var i=0;%>
+                            <%if(val.bookings.length>0 && currentUser) {%>
+                            <%val.bookings.forEach(function(books) {%>
+                                <% if(books.author.id.equals(currentUser._id)) {%>
+                                    <% i =1; %>
+                                    <form action="/campgrounds/<%= val._id %>/book/<%= books._id %>?_method=DELETE" method="POST" id="deletecm">
                                         <input type="submit" class="btn btn-md btn-danger" value="Cancel">
                                     </form>
-                                    <a class="btn btn-warning btn-md" href="#">Edit</a>
+                                    <a class="btn btn-warning btn-md" href="/campgrounds/<%= val._id %>/book/<%= books._id %>/edit">Edit</a>
                                 <% } %>
                             <% }) %>
-                        <% } else {%>
-                            <a class="btn btn-primary btn-lg" href="/campgrounds/<%= val._id %>/book">Book</a>
-                        <% } %>   
+                        <% } %>
+                        <% if (i!==1) {%>
+                                <a class="btn btn-primary btn-lg" href="/campgrounds/<%= val._id %>/book">Book</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -55,7 +59,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <strong><%= cmnt.author.username %></strong>
-                            <span class="pull-right"><%= moment(cmnt.created).fromNow() %></span>
+                            <span class="pull-right"><%= moment(cmnt.created).format('YYYY-MM-DD') %></span>
                             <p><%= cmnt.text %></p>
                             <% if((currentUser && cmnt.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin)) {  %>
                             <a class="btn btn-xs btn-warning" href="/campgrounds/<%= val._id %>/comments/<%= cmnt._id %>/edit">Edit</a>
@@ -78,7 +82,7 @@
     woeid: '',
     unit: 'c',
     success: function(weather) {
-      html = 'Temperature - ' + weather.temp+'&deg;'+weather.units.temp;
+      html = 'Temperature = ' + weather.temp+'&deg;'+weather.units.temp;
     //   html += '<ul><li>'+weather.city+', '+weather.region+'</li>';
     //   html += '<li class="currently">'+weather.currently+'</li>';
     //   html += '<li>'+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+'</li></ul>';
@@ -89,7 +93,35 @@
       $("#weather").html('<p>'+error+'</p>');
     }
   });
+  
 });
 </script>
-
+<script>
+    function initMap() {
+    var lat = <%= val.lat %>;
+    var lng = <%= val.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= val.name %><br />
+      <%= val.location %></strong>
+      <p><%= val.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA81aP0i-Va-9AnuPe-cipIc0A7aGQWoWc&callback=initMap"></script>
 <% include ../partials/footer %>

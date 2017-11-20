@@ -3,6 +3,7 @@ var router = express.Router(); //used for exporting the routes
 var Campground = require("../models/campground");
 var Booking = require("../models/booking");
 var middleware = require("../middleware"); //automatically require the content of index js
+var geocoder = require('geocoder');
 
 //index campground
 router.get("/",function(req,res)
@@ -63,20 +64,36 @@ router.post("/",middleware.isLoggedIn, function(req,res)
        username: req.user.username,
        phonenumber: req.user.phonenumber
    };
-   var val={name: name,image: image,description: dsc,author: author,location: location,cost: cost};
-   //create a new campground and save to a database 
-   Campground.create(val,function(err,nval)
-   {
-       if(err)
-       {
-           console.log(err);
-       }
-       else
-       {
-           //redirect back to campground
-           res.redirect("/campgrounds"); //default is a get request when redirecting so get method will run 
-       }
-   });
+   geocoder.geocode(req.body.location, function (err, data) {
+    var lat = data.results[0].geometry.location.lat;
+    var lng = data.results[0].geometry.location.lng;
+    var location = data.results[0].formatted_address;
+    var newCampground = {name: name, image: image, description: dsc, cost: cost, author:author, location: location, lat: lat, lng: lng};
+    // Create a new campground and save to DB
+    Campground.create(newCampground, function(err, newlyCreated){
+        if(err){
+            console.log(err);
+        } else {
+            //redirect back to campgrounds page
+            console.log(newlyCreated);
+            res.redirect("/campgrounds");
+        }
+    });
+  });
+//   var val={name: name,image: image,description: dsc,author: author,location: location,cost: cost};
+//   //create a new campground and save to a database 
+//   Campground.create(val,function(err,nval)
+//   {
+//       if(err)
+//       {
+//           console.log(err);
+//       }
+//       else
+//       {
+//           //redirect back to campground
+//           res.redirect("/campgrounds"); //default is a get request when redirecting so get method will run 
+//       }
+//   });
 });
 
 //a form to add new forms 

@@ -34,26 +34,28 @@
           
           <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#home" data-toggle="tab">Your Bookings</a></li>
-            <li><a href="#messages" data-toggle="tab">Your Campgrounds</a></li>
+            <!--<li><a href="#messages" data-toggle="tab">Your Campgrounds</a></li>-->
           </ul>
               
           <div class="tab-content">
             <div class="tab-pane active" id="home">
                 <div class="row gap">
-                    <%if (book) { %>
-                        <% for (var i=0;i<book.length;i++) { %>
+                    <%if (books) { %>
+                        <% for (var i=0;i<books.length;i++) { %>
                                 <div class="col-md-3 col-sm-4">
-                                    <div class="thumbnail try">
-                                        <img src="<%= book[i].camp.image %>"class="img">
+                                    <div class="thumbnail try" id="user">
+                                        <img src="<%= books[i].camp.image %>"class="img">
                                         <div class="caption text-center">
-                                             <h4><%= book[i].camp.name %></h4>
-                                             <h4><%= moment(book[i].date).format('YYYY-MM-DD') %></h4>
+                                             <h4><%= books[i].camp.name %></h4>
+                                             <h4><%= moment(books[i].date).format('YYYY-MM-DD') %></h4>
                                         </div>
                                     </div>
                                  </div>
                          <% } %>
                     <% } else { %>
-                        <h4>In Development</h4>
+                        <div class="col-md-3 col-sm-4">
+                            <h4>No Bookings yet</h4>
+                        </div>
                     <% } %>
                 </div>
                 <!--<hr>-->
@@ -68,16 +70,7 @@
              </div><!--/tab-pane-->
              <div class="tab-pane" id="messages">
                <div class="row gap"> 
-               <% for (var i=0;i<camp.length;i++) { %>
-                    <div class="col-md-3 col-sm-4">
-                        <div class="thumbnail try">
-                            <img src="<%= camp[i].image %>"class="img">
-                            <div class="caption text-center">
-                                 <h4><%= camp[i].name %></h4> 
-                            </div>
-                        </div>
-                     </div>
-                     <% } %>
+               
                    </div>
                
              </div><!--/tab-pane-->

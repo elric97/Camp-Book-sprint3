@@ -3,6 +3,11 @@
     height: 200px;
     width: 100%;
 }
+#user img
+{
+    height: 100px;
+    width: 100%;
+}
 .thumbnail img
 {
     width: 100%;
@@ -134,4 +139,8 @@
 {
     padding-top: 2%;
     padding-bottom: 2%;
+}
+#map {
+	height: 400px;
+	width: 100%;
 }

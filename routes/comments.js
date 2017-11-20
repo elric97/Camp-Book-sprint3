@@ -161,7 +161,38 @@ router.post("/book",middleware.isLoggedIn,function(req,res)
         }
     })
 });
+//edit
+router.get("/book/:book_id/edit",function(req,res)
+{
+    Booking.findById(req.params.book_id,function(err, val) 
+    {
+        if(err)
+        {
+            res.redirect("back");
+        }
+        else
+        {
+            res.render("editbook",{val_id: req.params.id,bId: req.params.book_id});
+        }
+    });
+});
 
+router.put("/book/:book_id",function(req,res)
+{
+    Booking.findById(req.params.book_id,function(err, updval)
+    {
+        if(err)
+        {
+            res.redirect("back");
+        }
+        else
+        {
+            updval.date = req.body.date;
+            updval.save();
+            res.redirect("/campgrounds/"+req.params.id);
+        }
+    });
+});
 //cancel booking
 router.delete("/book/:book_id",function(req, res) 
 {
@@ -173,8 +204,25 @@ router.delete("/book/:book_id",function(req, res)
         }
         else
         {
-            req.flash("success","Booking Cancelled");
-            res.redirect("/campgrounds/"+req.params.id);
+            Campground.findById(req.params.id,function(err,val1)
+            {
+                if(err)
+                {
+                    
+                }
+                else
+                {
+                    var index = val1.bookings.indexOf(req.params.book_id);
+                    if (index > -1) 
+                    {
+                        val1.bookings.splice(index, 1);
+                        val1.save();
+                    }
+                    req.flash("success","Booking Cancelled");
+                    res.redirect("/campgrounds/"+req.params.id);
+                }
+            });
+            
         }
     });
 });

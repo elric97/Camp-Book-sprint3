@@ -21,6 +21,9 @@
                         <li><a href="/login">Log In</a></li>
                         <li><a href="/register">Sign Up</a></li>
                     <% } else {%>
+                        <% if(currentUser.isAdmin) {%>
+                            <li><a href="/viewSales">Bookings Made</a></a></li>
+                        <% } %>
                         <li><a href="/users/<%= currentUser._id %>"><%= currentUser.username %></a></li>
                         <li><a href="/logout">Log out</a></li>
                     <% } %>

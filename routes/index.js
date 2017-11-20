@@ -87,31 +87,60 @@ router.get("/users/:id",function(req, res)
             }
             else
             {
-                console.log(val);
-                store = JSON.parse(JSON.stringify(val));
-                console.log(store);
+                // console.log(val);
+                // store = JSON.parse(JSON.stringify(val));
+                // console.log(store);
+                res.render("user/show",{user: found,books: val});
             }
         });
-        Campground.find({"author.username": found.username},function(err,cfound)
-        {
-            if(err)
-            {
-                res.redirect("/");
-            }
-            // Booking.find({"author.username": found.username},function(err,bfound)
-            // {
-            //     if (err)
-            //     {
-            //         res.redirect("/");
-            //     }
-            //     console.log(bfound.camp.id);
+        // Campground.find({"author.username": found.username},function(err,cfound)
+        // {
+        //     if(err)
+        //     {
+        //         res.redirect("/");
+        //     }
+        //     // Booking.find({"author.username": found.username},function(err,bfound)
+        //     // {
+        //     //     if (err)
+        //     //     {
+        //     //         res.redirect("/");
+        //     //     }
+        //     //     console.log(bfound.camp.id);
                 
-            // });
-            res.render("user/show",{user: found,camp: cfound,book: store});
-        });
+        //     // });
+        //     res.render("user/show",{user: found,camp: cfound,books: store});
+        // });
     });
 });
 
+router.get("/viewSales",function(req, res) 
+{
+    if(req.user)
+    {
+        if(!req.user.isAdmin)
+        {
+            req.flash("error","You need to be an Admin to access this page");
+            res.redirect("/campgrounds");
+        }        
+    }
+    else
+    {
+        req.flash("error","You need to be log in to view this");
+        res.redirect("/login");
+    }
+    Campground.find({},function(err, bfound) 
+    {
+        if(err)
+        {
+            
+        }
+        else
+        {
+            res.render("sales",{book: bfound});    
+        }
+    });
+    
+});
 // router.get("/campgrounds/:id/book",isLoggedIn,function(req, res) 
 // {
 //     res.render("book");
